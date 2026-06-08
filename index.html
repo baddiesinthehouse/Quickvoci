@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deutsch ↔ Englisch Vokabeltrainer</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        background: white;
+        width: 700px;
+        max-width: 100%;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+    }
+
+    .card {
+        margin-top: 20px;
+        padding: 30px;
+        text-align: center;
+        background: #eef4ff;
+        border-radius: 12px;
+        min-height: 120px;
+    }
+
+    .word {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1f4fa3;
+    }
+
+    .direction {
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        margin-top: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .check {
+        background: #2ecc71;
+        color: white;
+    }
+
+    .next {
+        background: #3498db;
+        color: white;
+    }
+
+    .result {
+        margin-top: 15px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .stats {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .correct {
+        color: green;
+    }
+
+    .wrong {
+        color: red;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📚 Deutsch ↔ Englisch Vokabeltrainer</h1>
+
+    <div class="card">
+        <div class="direction" id="direction"></div>
+        <div class="word" id="word"></div>
+    </div>
+
+    <input
+        type="text"
+        id="answer"
+        placeholder="Deine Übersetzung eingeben..."
+    >
+
+    <div style="text-align:center;">
+        <button class="check" onclick="checkAnswer()">Prüfen</button>
+        <button class="next" onclick="nextWord()">Nächstes Wort</button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <div class="stats">
+        ✅ Richtig: <span id="correct">0</span> |
+        ❌ Falsch: <span id="wrong">0</span>
+    </div>
+</div>
+
+<script>
+const vocabulary = [
+    { de: "Haus", en: "house" },
+    { de: "Auto", en: "car" },
+    { de: "Wasser", en: "water" },
+    { de: "Freund", en: "friend" },
+    { de: "Schule", en: "school" },
+    { de: "Essen", en: "food" },
+    { de: "Arbeit", en: "work" },
+    { de: "Stadt", en: "city" },
+    { de: "Familie", en: "family" },
+    { de: "Zeit", en: "time" },
+    { de: "Buch", en: "book" },
+    { de: "Fenster", en: "window" },
+    { de: "Straße", en: "street" },
+    { de: "Hund", en: "dog" },
+    { de: "Katze", en: "cat" }
+];
+
+let currentWord = {};
+let direction = "de-en";
+
+let correctCount = 0;
+let wrongCount = 0;
+
+function nextWord() {
+    currentWord =
+        vocabulary[Math.floor(Math.random() * vocabulary.length)];
+
+    direction = Math.random() > 0.5 ? "de-en" : "en-de";
+
+    document.getElementById("result").textContent = "";
+    document.getElementById("answer").value = "";
+
+    if (direction === "de-en") {
+        document.getElementById("direction").textContent =
+            "Übersetze ins Englische";
+        document.getElementById("word").textContent =
+            currentWord.de;
+    } else {
+        document.getElementById("direction").textContent =
+            "Übersetze ins Deutsche";
+        document.getElementById("word").textContent =
+            currentWord.en;
+    }
+}
+
+function checkAnswer() {
+    const userAnswer =
+        document.getElementById("answer")
+        .value
+        .trim()
+        .toLowerCase();
+
+    let correctAnswer =
+        direction === "de-en"
+        ? currentWord.en.toLowerCase()
+        : currentWord.de.toLowerCase();
+
+    const result = document.getElementById("result");
+
+    if (userAnswer === correctAnswer) {
+        correctCount++;
+        result.innerHTML =
+            '<span class="correct">✅ Richtig!</span>';
+    } else {
+        wrongCount++;
+        result.innerHTML =
+            '<span class="wrong">❌ Falsch.</span><br>Richtige Antwort: <b>' +
+            correctAnswer +
+            '</b>';
+    }
+
+    document.getElementById("correct").textContent =
+        correctCount;
+
+    document.getElementById("wrong").textContent =
+        wrongCount;
+}
+
+nextWord();
+</script>
+
+</body>
+</html>
